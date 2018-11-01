@@ -18,6 +18,13 @@
    별을 찍을 세로줄을 black_col이라고 할때 가로줄을 black_row_start라고 하며 정 중앙에 찍혀야 하기 때문에 초기에는 같은값을 가진다.
    
    현재 컬럼의 상태(col)이 초기에 정한 black_col 이상이고, 가로줄이 별을 찍을 값의 범위안일때 *을 찍는다.
+   
+   - 별을 찍는 범위 구하기
+   SIZE가 5라면 black_row_start의 초기값은 3이며, 그다음 실행에서 2가 될것이다.
+   black_row_end의 초기값은 3이며, 그다음 실행에서 4가 될것이다.
+  
+  이것은, 최초 *을 찍는 범위가 3,3이며 그다음 실행에서는 앞,뒤로 한칸씩 늘리게된다.
+  따라서 다음줄에서는 2,3 3,3 4,3에서 *을 찍게된다.
 */
 
 #include <stdio.h>
@@ -25,21 +32,21 @@
 void print_triangle() {
 
 	int black_col = (SIZE / 2) + 1; // SIZE가 5일때 3이된다.
-	int black_row_start = black_col; // 공백과 별이 섞여서 출력되기 시작할(피라미드를 그리기 시작할) 가로줄
-	int black_row_end = black_row_start; // 공백과 별이 섞여서 출력될 줄의 길이
+	int black_row_start = black_col; // 별을 찍기 시작할 가로줄의 시작점
+	int black_row_end = black_row_start; // 별을 찍기 시작할 가로줄의 끝나는점
 
 	for(int col = 1; col <= SIZE; col++) { // 세로줄
 		for(int row = 1; row <= SIZE; row++) { //가로줄
 			
-			if((col >= black_col) && (row >= black_row_start) && (row <= black_row_end))
-				printf("*");
+			if((col >= black_col) && (row >= black_row_start) && (row <= black_row_end)) // 공백이 끝났고, 별을찍을 범위라면
+				printf("*"); //별을 출력한다.
 			else 
-				printf(" ");
+				printf(" "); 
 		}
 
-		printf("\n");
+		printf("\n"); // 가로줄 입력이 모두 끝났을때 줄을 바꾼다.
 
-		if(col >= black_col) {
+		if(col >= black_col) { // *을 입력할 범위를 수정하는 로직.
 			black_row_start--;
 			black_row_end++;
 		}
